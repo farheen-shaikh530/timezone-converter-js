@@ -1,9 +1,128 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Timezone Converter</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🌍 Timezone Converter</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f4f4f4;
+      padding: 30px;
+      text-align: center;
+    }
+    h1 {
+      color: #222;
+    }
+    .container {
+      background: #fff;
+      padding: 20px;
+      max-width: 500px;
+      margin: auto;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    label {
+      display: block;
+      margin-top: 20px;
+      font-weight: bold;
+    }
+    select, input[type="datetime-local"] {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    #result {
+      margin-top: 25px;
+      font-size: 1.2em;
+      font-weight: bold;
+      color: #333;
+    }
+    .copy-btn {
+      margin-top: 10px;
+      background: #28a745;
+    }
+  </style>
 </head>
 <body>
-  <h1>Hello from GitHub Pages!</h1>
+  <div class="container">
+    <h1>🌐 Timezone Converter</h1>
+    <label for="datetime">Enter Date & Time:</label>
+    <input type="datetime-local" id="datetime" />
+
+    <label for="from">From Timezone:</label>
+    <select id="from">
+      <option value="Asia/Kolkata">Asia/Kolkata</option>
+      <option value="America/New_York">America/New_York</option>
+      <option value="Europe/London">Europe/London</option>
+      <option value="Asia/Dubai">Asia/Dubai</option>
+      <option value="Australia/Sydney">Australia/Sydney</option>
+    </select>
+
+    <label for="to">To Timezone:</label>
+    <select id="to">
+      <option value="America/New_York">America/New_York</option>
+      <option value="Asia/Kolkata">Asia/Kolkata</option>
+      <option value="Europe/London">Europe/London</option>
+      <option value="Asia/Dubai">Asia/Dubai</option>
+      <option value="Australia/Sydney">Australia/Sydney</option>
+    </select>
+
+    <button onclick="convert()">Convert Time</button>
+    <div id="result"></div>
+    <button class="copy-btn" onclick="copyResult()">Copy Result</button>
+  </div>
+
+  <script>
+    function convertTimeZone(dateInput, fromTimeZone, toTimeZone) {
+      const fromDate = new Date(dateInput);
+
+      const options = {
+        year: 'numeric', month: '2-digit', day: '2-digit',
+        hour: '2-digit', minute: '2-digit', second: '2-digit',
+        timeZone: toTimeZone,
+        hour12: false,
+      };
+
+      const formatter = new Intl.DateTimeFormat('en-US', options);
+      return formatter.format(fromDate);
+    }
+
+    function convert() {
+      const input = document.getElementById("datetime").value;
+      const from = document.getElementById("from").value;
+      const to = document.getElementById("to").value;
+      const resultBox = document.getElementById("result");
+
+      if (!input) {
+        resultBox.textContent = "Please select a date and time.";
+        return;
+      }
+
+      const isoTime = new Date(input).toISOString();
+      const converted = convertTimeZone(isoTime, from, to);
+      resultBox.textContent = `⏱ Converted Time: ${converted} (${to})`;
+    }
+
+    function copyResult() {
+      const text = document.getElementById("result").textContent;
+      if (text) {
+        navigator.clipboard.writeText(text).then(() => {
+          alert("Copied to clipboard!");
+        });
+      }
+    }
+  </script>
 </body>
 </html>
