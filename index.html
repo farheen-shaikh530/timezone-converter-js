@@ -4,12 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>🌍 Timezone Converter</title>
-  <style>
+  <style id="theme-style">
     body {
       font-family: 'Segoe UI', sans-serif;
       background: #f4f4f4;
       padding: 30px;
       text-align: center;
+      transition: background 0.3s, color 0.3s;
     }
     h1 {
       color: #222;
@@ -43,48 +44,67 @@
       border-radius: 5px;
       cursor: pointer;
     }
+    .copy-btn {
+      margin-top: 10px;
+      background: #28a745;
+    }
     #result {
       margin-top: 25px;
       font-size: 1.2em;
       font-weight: bold;
       color: #333;
     }
-    .copy-btn {
-      margin-top: 10px;
-      background: #28a745;
+
+    /* Dark mode */
+    body.dark {
+      background-color: #121212;
+      color: #f4f4f4;
+    }
+    .container.dark {
+      background-color: #1e1e1e;
+      box-shadow: none;
     }
   </style>
 </head>
 <body>
-  <div class="container">
+  <div class="container" id="container">
     <h1>🌐 Timezone Converter</h1>
+
     <label for="datetime">Enter Date & Time:</label>
     <input type="datetime-local" id="datetime" />
 
     <label for="from">From Timezone:</label>
-    <select id="from">
-      <option value="Asia/Kolkata">Asia/Kolkata</option>
-      <option value="America/New_York">America/New_York</option>
-      <option value="Europe/London">Europe/London</option>
-      <option value="Asia/Dubai">Asia/Dubai</option>
-      <option value="Australia/Sydney">Australia/Sydney</option>
-    </select>
+    <select id="from"></select>
 
     <label for="to">To Timezone:</label>
-    <select id="to">
-      <option value="America/New_York">America/New_York</option>
-      <option value="Asia/Kolkata">Asia/Kolkata</option>
-      <option value="Europe/London">Europe/London</option>
-      <option value="Asia/Dubai">Asia/Dubai</option>
-      <option value="Australia/Sydney">Australia/Sydney</option>
-    </select>
+    <select id="to"></select>
 
     <button onclick="convert()">Convert Time</button>
     <div id="result"></div>
     <button class="copy-btn" onclick="copyResult()">Copy Result</button>
+    <br/>
+    <button onclick="toggleTheme()">🌓 Toggle Dark Mode</button>
   </div>
 
   <script>
+    async function loadTimezones() {
+      const res = await fetch("https://worldtimeapi.org/api/timezone");
+      const zones = await res.json();
+
+      const fromSelect = document.getElementById("from");
+      const toSelect = document.getElementById("to");
+
+      zones.forEach(zone => {
+        const option1 = new Option(zone, zone);
+        const option2 = new Option(zone, zone);
+        fromSelect.appendChild(option1);
+        toSelect.appendChild(option2);
+      });
+
+      fromSelect.value = "Asia/Kolkata";
+      toSelect.value = "America/New_York";
+    }
+
     function convertTimeZone(dateInput, fromTimeZone, toTimeZone) {
       const fromDate = new Date(dateInput);
 
@@ -123,6 +143,14 @@
         });
       }
     }
+
+    function toggleTheme() {
+      document.body.classList.toggle("dark");
+      document.getElementById("container").classList.toggle("dark");
+    }
+
+    // Load timezones on startup
+    window.onload = loadTimezones;
   </script>
 </body>
 </html>
