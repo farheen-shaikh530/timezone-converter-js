@@ -1,0 +1,14 @@
+{
+  "name": "timezone-converter",
+  "version": "1.0.0",
+  "description": "A JavaScript timezone converter with Jest unit tests",
+  "main": "timezoneConverter.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "author": "Farheen Shaikh",
+  "license": "MIT",
+  "devDependencies": {
+    "jest": "^29.0.0"
+  }
+}
